@@ -13,7 +13,7 @@ const ids=h=>[...h.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
 test('ten planned apps have six accurately labeled browser previews',()=>{
  assert.equal((apps.match(/class="card"/g)||[]).length,10);
  assert.equal((apps.match(/class="tag">Browser preview<\/span>/g)||[]).length,6);
- assert.match(apps,/full server-backed applications are not yet qualified/i);
+ assert.match(apps,/full suite acceptance are not yet qualified/i);
 });
 
 test('six demo entrypoints have corresponding controls',()=>{
