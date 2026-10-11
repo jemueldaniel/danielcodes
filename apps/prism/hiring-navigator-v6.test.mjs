@@ -6,7 +6,7 @@ test('all ten demos have real routes and explicit truthful scope',async()=>{
  const html=await h();
  for(const name of ['Workflow Studio','Knowledge &amp; Evaluation Lab','Daniel Agent','Daniel Social','Daniel Pay','Developer Workbench','Code Lab','Contract Lab','Interface Lab','Project Workspace'])assert.ok(html.includes(name),name);
  for(const route of ['/apps/live/#workflow','/apps/live/#knowledge','/apps/agent/','/apps/social/','/apps/pay/','/apps/workbench/','/apps/code/','/apps/contract/','/apps/interface/','/apps/project/'])assert.ok(html.includes(route),route);
- assert.match(html,/EVM qualification pending/);assert.match(html,/Fictional ledger/);assert.match(html,/No real assets/);assert.match(html,/SDK or protocol-level MCP/);
+ assert.match(html,/Real offline EVM/);assert.match(html,/Fictional ledger/);assert.match(html,/No real assets/);assert.match(html,/SDK or protocol-level MCP/);
  assert.equal((html.match(/id="jdDemoNavigator"/g)||[]).length,1);
  assert.equal((html.match(/id="jdDemoForm"/g)||[]).length,1);
  assert.equal((html.match(/<option value=/g)||[]).length,10);

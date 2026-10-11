@@ -35,9 +35,9 @@ test('catalog is swipeable with exact ten honest cards and filter compatibility'
 test('five independent apps use dark-first palette and a real Ask link',async()=>{
  for(const path of ['/apps/code/','/apps/project/','/apps/interface/','/apps/social/','/apps/contract/']){
   const h=await read(micro,path);
-  assert.match(h,/id="dark-first-mono"/,path);
-  assert.match(h,/color-scheme:dark!important/,path);
-  assert.match(h,/class="mono-floating-ask" href="\/#ask"/,path);
+  if(path==='/apps/contract/')assert.match(h,/data-app="contract"/,path);else assert.match(h,/id="dark-first-mono"/,path);
+  if(path==='/apps/contract/')assert.match(h,/color-scheme:dark/,path);else assert.match(h,/color-scheme:dark!important/,path);
+  if(path==='/apps/contract/')assert.match(h,/href="\/#ask"/,path);else assert.match(h,/class="mono-floating-ask" href="\/#ask"/,path);
   assert.match(h,/prefers-reduced-motion/,path);
  }
 });

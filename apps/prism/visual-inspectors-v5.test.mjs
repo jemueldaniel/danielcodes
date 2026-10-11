@@ -57,6 +57,6 @@ test('other independent apps preserve existing source and truthful contract qual
   assert.equal(resp.status,200);
   const text=await resp.text();
   assert.doesNotMatch(text,/workform-v5-inspectors/);
-  if(slug==='contract')assert.match(text,/qualification|not.*execut|pending/i);
+  if(slug==='contract'){assert.match(text,/EthereumJS EVM 10.1.3/);assert.match(text,/No deployed contract, blockchain state/)}
  }
 });

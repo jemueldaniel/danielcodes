@@ -35,8 +35,8 @@ test('catalog exposes ten distinct visuals and exactly scoped statuses', async (
   assert.equal((html.match(/class="card" data-stage/g) || []).length, 10);
   assert.equal((html.match(/class="app-art /g) || []).length, 10);
   assert.equal((html.match(/data-stage="live"/g) || []).length, 4);
-  assert.equal((html.match(/data-stage="local"/g) || []).length, 5);
-  assert.equal((html.match(/data-stage="pending"/g) || []).length, 1);
+  assert.equal((html.match(/data-stage="local"/g) || []).length, 6);
+  assert.equal((html.match(/data-stage="pending"/g) || []).length, 0);
   for (const path of [
     '/apps/live/#workflow','/apps/live/#knowledge','/apps/agent/',
     '/apps/social/','/apps/pay/','/apps/workbench/',
@@ -56,11 +56,12 @@ test('each independent app page is semantically complete and honest', async () =
     assert.match(html, /<h1>/);
   }
   const contract = await read(microapps, '/apps/contract/');
-  assert.match(contract, /No EVM transaction has been executed/);
+  assert.match(contract, /Run a real, pinned EthereumJS EVM/);
+  assert.match(contract, /No deployed contract, blockchain state, Solidity compiler/);
 });
 
 test('known browser modules are served, unknown nested paths rejected', async () => {
-  for (const slug of ['code','project','interface','social']) {
+  for (const slug of ['code','project','interface','social','contract']) {
     const response = await get(microapps, '/apps/'+slug+'/app.js');
     assert.equal(response.status, 200, slug);
     assert.match(response.headers.get('content-type'), /javascript/);
@@ -68,7 +69,7 @@ test('known browser modules are served, unknown nested paths rejected', async ()
   }
   for (const path of [
     '/apps/code/app.js/evil','/apps/code/unexpected',
-    '/apps/contract/app.js','/apps/interface/other','/apps/unknown/'
+    '/apps/contract/app.js/evil','/apps/interface/other','/apps/unknown/'
   ]) assert.equal((await get(microapps, path)).status, 404, path);
   assert.equal((await get(microapps, '/apps/social/', 'POST')).status, 405);
   assert.equal((await get(prism, '/', 'POST')).status, 405);
