@@ -54,3 +54,13 @@ test('social is actionable, honest and entirely synthetic',async()=>{
  assert.match(js,/follows/);assert.match(js,/p\.likes|x\.likes/);assert.match(js,/sessionStorage\.setItem/);
  assert.doesNotMatch(js,/fetch\(|XMLHttpRequest|WebSocket|innerHTML\s*=/);
 });
+
+test('touch swipe has a bounded fallback that does not override already-scrolled native gestures',async()=>{
+ const home=await read(prism,'/'),catalog=await read(prism,'/apps/');
+ for(const source of [home,catalog]){
+  assert.match(source,/addEventListener\('touchstart'/);
+  assert.match(source,/addEventListener\('touchend'/);
+  assert.match(source,/passive:true/);
+  assert.match(source,/Math\.abs\(track\.scrollLeft-p\.start\)<24/);
+ }
+});
