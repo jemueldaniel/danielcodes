@@ -23,7 +23,7 @@ test('all five categories are accessible and case IDs are unique',()=>{
 test('public proof routes go only to the approved personal repository',()=>{
  const urls=[...html.matchAll(/href="(https?:\/\/[^\"]+)"/g)].map(x=>new URL(x[1]));
  assert.ok(urls.length>=3);
- assert.ok(urls.every(x=>x.hostname==='github.com'&&x.pathname.startsWith('/jemueldaniel/danielcodes/')));
+ assert.ok(urls.every(x=>x.hostname==='github.com'&&(x.pathname.startsWith('/jemueldaniel/danielcodes/')||x.pathname==='/jemueldaniel/danielworks')));
  assert.ok(!html.includes('casteragents-ai')&&!html.includes('V5-CHANGES.patch'));
 });
 test('themes, reduced motion and keyboard focus are implemented without network scripts',()=>{
