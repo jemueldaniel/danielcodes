@@ -1,0 +1,15 @@
+# Workform V9 — Natural-color Portrait + Floating Ask Daniel
+
+**Source:** Original first-party popup `apps/prism/popup-chat.js`. The live portrait is the user's original, full-color `assets/portrait.jpg` (640×640); no pixel or face edits. Previously, app styles such as `img{filter:grayscale(1)}` desaturated it. This release overrides the filter across safely managed pages and fixes the Workbench's missing `img-src 'self'` CSP directive.
+
+**New experience:** Compact responsive blue/charcoal floating chatbot, attached to the lower-left portrait button. A click or `/#ask` link opens an accessible, closable **nonmodal** panel with fast actions, recruiter-oriented source links, form, streaming same-origin `/api/chat/stream` responses, cancellation, bounded input/output, keyboard focus and Escape. No third-party assets or public retrieval of private company files. No forced modal backdrop or blocking full-screen overlay. `prefers-reduced-motion` disables animated transitions; printing hides the widget. On the homepage the old embedded assistant is visually hidden, but retained as a fallback if the shared widget fails to load.
+
+**Shared source delivery:** `/ui-20261011/chat-widget-v9.js` is served by the existing Prism Worker, not a new global route. The homepage, 10-app catalog, standalone Agent, Workbench, Evidence and five existing microapps each load exactly the same first-party module. Only the narrow CSP directives needed for portrait and same-origin chat are amended: Workbench `img-src 'self' data:`, Microapps/Evidence `connect-src 'self'`. No D1 schemas, guest API operations, routing, auth or private data change.
+
+**Release hold:** The independent /apps/live/ Workflow/Knowledge and /apps/pay/ presentations had prior safety-denied publication. This commit **does not change those Workers or bypass their holds**; their existing Ask links can navigate to the popup on the homepage. HTML résumé/cover-letter source pages are served by a separate legacy portfolio Worker and require independently qualified patching; the PDFs themselves cannot embed a live HTML chatbot.
+
+**Qualification:**
+- `node --test apps/prism/*.test.mjs apps/agent/*.test.mjs apps/workbench/*.test.mjs apps/evidence/*.test.mjs apps/pay/*.test.mjs apps/cloud-live/*.test.mjs`.
+- `node apps/prism/fullcolor-popup-v9.browser.cjs`: real Microsoft Edge, isolated localhost, 320/390/768/1440, all ten safe independently served pages. Tests include photo filter, avatar image decode/color channels, popup open/close/keyboard/focus, nonmodal small-screen layout, same-page Ask link interception and SSE test responses. Synthetic streamed test responses do **not** qualify production backend.
+- Live acceptance must repeat these controls against actual HTTPS and send a bounded real question to `/api/chat/stream` to verify the dynamic endpoint. Report model/stream failures honestly.
+- For any release, compare live Worker Git-blob SHA-1 to the pinned previous exact source, preserve binding/settings/route scope, then independently read back the deployed code and confirm 100% traffic before claiming success.
