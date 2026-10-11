@@ -28,3 +28,10 @@ Historical checkpoint `Daniel-Custom-Apps-Foundation-Checkpoint.zip` was found i
 5. Perform reviewed, authorized release and independent live-site readback.
 
 The fictional Daniel Coin ledger has no monetary value, wallet or real blockchain. No job-application correspondence or private Google Drive records belong in this public repository.
+
+## Additional 11 October hardening — current source stage
+
+- The existing ten-app catalog now links five independently authored **browser-local** exercises: Workflow Studio, Knowledge & Evaluation Lab, Code Lab, Interface Lab, and Project Workspace. Three new sample routes live in `apps/labs/`. None is a replacement for a server-backed application.
+- The standalone pure `apps/labs/labs.mjs` has **8 passing deterministic Node unit tests** covering compiler parsing/overflow, virtual file revisions, tab reload and bounded diffs; public sample static layout was checked at 320, 390, 768 and 1440px with no page overflow. Native device and online browser checks remain unrun.
+- The **separate private** Node/SQLite candidate v3 passed **34/34 API integration tests**, adding early cancellation tombstones, saved receipt index, live SQLite workspace data deletion, storage/suite admission limits, tested rollback, graph validation and a fixed starter-workflow reset. It also exposes local-only advanced graph and synthetic social controls. That private backend is **not** in GitHub; its source includes historical recovered modules requiring review.
+- This development branch remains unmerged. The original custom-domain Worker/D1, later baseline, full EVM qualification, and accepted live release are still unresolved. Do not present it as ten deployed apps or as production migration.
