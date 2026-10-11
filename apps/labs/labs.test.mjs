@@ -1,0 +1,17 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {tokenize,executeTinyLanguage,validateFileName,lineDiff,createProjectStore} from './labs.mjs';
+test('token positions and complete tiny-language pipeline',()=>{const result=executeTinyLanguage('let base = 40; return (base + 2);');assert.equal(result.result,42);assert.equal(result.ast.length,2);assert.equal(result.tokens[0].offset,0);assert.ok(result.trace.some(x=>x.operation==='RETURN'));});
+test('expression grouping, bindings and finite integers',()=>{assert.equal(executeTinyLanguage('let a=2;let b=a+3;return (b+4)+1;').result,10);assert.equal(executeTinyLanguage('return 0;').result,0);});
+test('reject undefined names without executing arbitrary JS',()=>{assert.throws(()=>executeTinyLanguage('return unknown;'),{code:'UNBOUND_IDENTIFIER'});assert.throws(()=>executeTinyLanguage('return process.exit(1);'));});
+test('reject malformed and duplicate source',()=>{for(const source of ['let = 1; return 2;','let x=1;let x=2;return x;','return 12','while(1){}','return 2;return 3;'])assert.throws(()=>executeTinyLanguage(source));});
+test('safe integer addition, exact error locations and bounded source',()=>{assert.throws(()=>executeTinyLanguage('return 9007199254740991 + 1;'),{code:'INTEGER_OVERFLOW'});assert.throws(()=>executeTinyLanguage('return @;'),{code:'UNEXPECTED_CHARACTER',offset:7});assert.throws(()=>tokenize('a'.repeat(3001)),{code:'SOURCE_SIZE_LIMIT'});});
+test('project saves immutable text revisions and real diffs',()=>{const s=new Map(),store=createProjectStore({getItem:k=>s.get(k),setItem:(k,v)=>s.set(k,v),removeItem:k=>s.delete(k)});
+ assert.equal(store.save('notes.txt','alpha\nbeta',0).revision,1);assert.equal(store.save('notes.txt','alpha\ngamma',1).revision,2);
+ assert.equal(store.read('notes.txt',1),'alpha\nbeta');assert.match(store.compare('notes.txt',1,2).diff,/\-beta/);assert.match(store.compare('notes.txt',1,2).diff,/\+gamma/);
+ assert.equal(store.restore('notes.txt',1).revision,3);assert.equal(store.read('notes.txt'),'alpha\nbeta');assert.equal(store.list()[0].revision,3);
+ assert.throws(()=>store.save('notes.txt','wrong',1),{code:'STALE_REVISION'});
+ store.clear();assert.deepEqual(store.list(),[]);
+});
+test('project path traversal and impossible oversized diffs rejected',()=>{for(const path of ['../secret.txt','/absolute.txt','C:\\secret.txt','notext','..\\evil.txt'])assert.throws(()=>validateFileName(path));assert.throws(()=>lineDiff('x\n'.repeat(510),'y'),{code:'DIFF_TOO_COMPLEX'});});
+test('tab-local project reload correctly restores history',()=>{const s=new Map(),storage={getItem:k=>s.get(k),setItem:(k,v)=>s.set(k,v),removeItem:k=>s.delete(k)};createProjectStore(storage).save('demo.txt','saved');assert.equal(createProjectStore(storage).read('demo.txt'),'saved');});
