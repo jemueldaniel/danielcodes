@@ -6,18 +6,21 @@ import {readFileSync} from 'node:fs';
 const home=readFileSync(new URL('../../index.html',import.meta.url),'utf8');
 const apps=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const labs=readFileSync(new URL('../labs/index.html',import.meta.url),'utf8');
-const pages=[['home',home],['catalog',apps],['labs',labs]];
+const pay=readFileSync(new URL('../pay/index.html',import.meta.url),'utf8');
+const pages=[['home',home],['catalog',apps],['labs',labs],['fictional-pay',pay]];
 const ids=h=>[...h.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
 
-test('ten planned apps have five accurately labeled browser previews',()=>{
+test('ten planned apps have six accurately labeled browser previews',()=>{
  assert.equal((apps.match(/class="card"/g)||[]).length,10);
- assert.equal((apps.match(/class="tag">Browser preview<\/span>/g)||[]).length,5);
+ assert.equal((apps.match(/class="tag">Browser preview<\/span>/g)||[]).length,6);
  assert.match(apps,/full server-backed applications are not yet qualified/i);
 });
 
-test('five demo entrypoints have corresponding controls',()=>{
+test('six demo entrypoints have corresponding controls',()=>{
  assert.match(apps,/data-open="workflow"/);
  assert.match(apps,/data-open="lab"/);
+ assert.ok(apps.includes('href="/apps/pay/"'));
+ assert.match(pay,/Fictional Daniel Coins have zero monetary value/);
  for(const app of ['code','interface','project']){
   assert.ok(apps.includes('/apps/labs/#'+app),'Missing catalog link for '+app);
   assert.ok(labs.includes('id="tab-'+app+'"'),'Missing lab tab for '+app);
