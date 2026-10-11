@@ -21,6 +21,7 @@ import {executeTinyLanguage,createProjectStore} from './labs.mjs';
 const $=id=>document.getElementById(id),tabs=['code','project','interface'];
 function openTab(id){for(const key of tabs){let selected=key===id,b=$('tab-'+key);b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;$('panel-'+key).hidden=!selected;}$('tab-'+id).focus({preventScroll:true});}
 tabs.forEach((id,i)=>{$('tab-'+id).addEventListener('click',()=>openTab(id));$('tab-'+id).addEventListener('keydown',e=>{let next=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(next){e.preventDefault();openTab(tabs[(i+next+tabs.length)%tabs.length]);}})});
+const initialTab=location.hash.replace(/^#/,'');if(tabs.includes(initialTab))openTab(initialTab);
 const root=document.documentElement;try{if(localStorage.getItem('daniel-theme')==='dark')root.dataset.theme='dark';}catch{}
 function updateTheme(){let dark=root.dataset.theme==='dark';$('theme').textContent=dark?'Light mode':'Dark mode';$('theme').setAttribute('aria-pressed',String(dark));}updateTheme();$('theme').addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';updateTheme();try{localStorage.setItem('daniel-theme',root.dataset.theme);}catch{}});
 $('code-form').addEventListener('submit',e=>{e.preventDefault();try{$('code-result').textContent=JSON.stringify(executeTinyLanguage($('source').value),null,2);}catch(err){$('code-result').textContent=JSON.stringify({ok:false,error:err.code||err.message,offset:err.offset??null},null,2);}});
