@@ -33,3 +33,18 @@ test('recruiter evidence answer explicitly distinguishes server, browser, and pe
    assert.ok(html.includes(statement),statement);
  }
 });
+
+test('all five case studies expose real, accurately labeled references',async()=>{
+ const h=await(await get()).text();
+ assert.equal((h.match(/class="case-proof-links"/g)||[]).length,5);
+ assert.match(h,/Related public React source/);
+ assert.match(h,/Related replay\/fencing reference/);
+ assert.match(h,/Related tested Rust pipeline/);
+ assert.match(h,/Check prototype limitations/);
+ for(const source of [
+  'danielworks/blob/main/projects/evidence-workbench/web/App.tsx',
+  'danielworks/blob/main/examples/event_outbox/README.md',
+  'danielworks/blob/main/projects/bounded-lang/README.md'
+ ])assert.ok(h.includes(source),source);
+ assert.doesNotMatch(h,/jemueldanieljobs|BEGIN PRIVATE KEY|castractseedprompt/i);
+});
