@@ -22,7 +22,7 @@ for(const [name,paths] of Object.entries({
    const script=await get(paths[0]+part);assert.equal(script.status,200);
    const content=await script.text();assert.ok(content.length>2000);
    if(name==='studio'){assert.match(content,/\/apps\/api/);assert.doesNotThrow(()=>new Function(content));}
-   else {assert.match(content,/const INITIAL=1000/);assert.match(content,/export \{/);}
+   else {assert.match(content,/const INITIAL=1000/);assert.match(content,/export function createFictionalLedger/);}
    assert.equal((await get(paths[0]+'unknown')).status,404);
    assert.equal((await get(paths[0],'POST')).status,405);
  });
