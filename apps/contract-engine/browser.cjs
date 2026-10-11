@@ -13,7 +13,9 @@ const executablePath=process.env.PLAYWRIGHT_EXECUTABLE||undefined;
   }catch(e){res.writeHead(500);res.end(String(e.stack))}
  });
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
- const origin='http://127.0.0.1:'+server.address().port;
+ const target=process.env.WORKFORM_LIVE_ORIGIN;
+ if(target&&target!=='https://jemueldaniel.website')throw Error('Remote tests only allowed for the portfolio domain');
+ const origin=target||'http://127.0.0.1:'+server.address().port;
  const browser=await chromium.launch({headless:true,...(executablePath?{executablePath}:{}),args:['--no-first-run','--disable-extensions']});
  let count=0;const errors=[],outsides=[];function check(ok,label){assert.ok(ok,label);count++;console.log('PASS',label)}
  try{
@@ -48,7 +50,10 @@ const executablePath=process.env.PLAYWRIGHT_EXECUTABLE||undefined;
   await context.close();
  }
  check(errors.length===0,'Zero browser JS errors '+JSON.stringify(errors));
- check(outsides.length===0,'All requests remain same-origin, no RPC/CDN calls: '+JSON.stringify(outsides));
+ const platformBeacons=outsides.filter(u=>u.startsWith('https://static.cloudflareinsights.com/beacon.min.js/'));
+ const unexpected=outsides.filter(u=>!u.startsWith('https://static.cloudflareinsights.com/beacon.min.js/'));
+ console.log('PLATFORM_BEACON_REQUESTS',platformBeacons.length);
+ check(unexpected.length===0,'No EVM RPC or unexpected external requests: '+JSON.stringify(unexpected));
  console.log('TOTAL',count,'REAL_BROWSER_CHECKS_PASS');
  }finally{await browser.close();await new Promise((r,j)=>server.close(e=>e?j(e):r()))}
 })().catch(e=>{console.error(e.stack);process.exitCode=1});
