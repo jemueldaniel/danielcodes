@@ -20,7 +20,7 @@ for(const [name,worker,base] of [['Agent',agent,'/apps/agent'],['Developer Workb
    const path=js.status===200?base+'/client.js':base+'/app.js';
    const script=await get(worker,path);assert.equal(script.status,200);
    assert.match(script.headers.get('content-type'),/javascript/i);
-   assert.doesNotThrow(()=>new Function(await script.text()));
+   const js=await script.text();assert.doesNotThrow(()=>new Function(js));
    const health=await get(worker,base+'/health');assert.equal(health.status,200);
    assert.equal((await health.json()).ok,true);
  });
