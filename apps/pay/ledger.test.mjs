@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {createFictionalLedger} from './ledger.mjs';
+import {createFictionalLedger,clearFictionalLedgerTab} from './ledger.mjs';
 const make=()=>{let d=new Map();return {getItem:k=>d.has(k)?d.get(k):null,setItem:(k,v)=>d.set(k,v),removeItem:k=>d.delete(k),inspect:()=>[...d.values()][0],poison:value=>d.set('jemuel-fake-pay-preview-v1',value)};};
 const intent=(opId='tx_1',amount=125,sourceVersion=1,from='A',to='B')=>({opId,amount,sourceVersion,from,to});
 test('starts with exactly 2,000 fictional units and no external account',()=>{let x=createFictionalLedger(make());assert.equal(x.summary().fictionalSupply,2000);assert.equal(x.summary().balances.A.value,1000);assert.equal(x.summary().totalTransfers,0);assert.match(x.summary().disclaimer,/zero monetary value/);});
@@ -14,3 +14,4 @@ test('corrupted storage state refuses to claim money was preserved',()=>{const s
 test('all admitted transfers remain paginatable beyond recent-summary limits',()=>{let x=createFictionalLedger(make());let vA=1,vB=1;for(let i=0;i<61;i++){const from=i%2?'B':'A';x.transfer(intent('tx_'+i,1,from==='A'?vA:vB,from,from==='A'?'B':'A'));vA++;vB++;}let h=x.history(null,23),all=[...h.transfers.map(z=>z.seq)];while(h.nextCursor){h=x.history(h.nextCursor,23);all.push(...h.transfers.map(z=>z.seq));}assert.deepEqual(all,Array.from({length:61},(_,i)=>61-i));assert.equal(x.verify().fictionalSupply,2000);});
 test('history cursor stays stable when a later transfer is committed',()=>{let x=createFictionalLedger(make());x.transfer(intent('first',1,1));x.transfer(intent('second',1,2,'B','A'));let p=x.history(null,1);assert.equal(p.transfers[0].seq,2);x.transfer(intent('third',1,3));assert.equal(x.history(p.nextCursor,1).transfers[0].seq,1);});
 test('clearing a tab removes only local simulated history',()=>{const s=make(),x=createFictionalLedger(s);x.transfer(intent());x.clear();assert.equal(createFictionalLedger(s).summary().totalTransfers,0);assert.equal(createFictionalLedger(s).summary().balances.A.value,1000);});
+test('corrupt tab state can be explicitly repaired without trusting it',()=>{const s=make(),x=createFictionalLedger(s);x.transfer(intent());const bad=JSON.parse(s.inspect());bad.balances.B.value=1;s.poison(JSON.stringify(bad));assert.throws(()=>createFictionalLedger(s),{code:'CORRUPT_LEDGER_STATE'});assert.equal(clearFictionalLedgerTab(s),true);assert.equal(createFictionalLedger(s).summary().totalTransfers,0);});
