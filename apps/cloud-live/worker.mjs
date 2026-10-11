@@ -99,10 +99,12 @@ const saveWorkflow=async(req,env,w)=>{
   return ok({ok:true,workflow:workflowRow(await workflowGet(env,w,wid))},201);
 };
 const submitRun=async(req,env,w)=>{
-  const b=await body(req),workId=id(b.workflowId),op=opId(b.operationId);const wf=await workflowGet(env,w,workId);
-  const dig=await normalizedPayload('run', {workflowId:workId,revision:wf.revision,input:wf.input_text,steps:wf.steps_json});
+  const b=await body(req),workId=id(b.workflowId),op=opId(b.operationId);
   const previous=await dbOne(env.DB.prepare('SELECT * FROM runs WHERE workspace_id=? AND op_key=?'),w,op);
-  if(previous){if(previous.input_digest!==dig)fail(409,'OPERATION_CONFLICT');return ok({ok:true,run:JSON.parse(previous.result_json),replayed:true})}
+  // Retry identity is bound to its original workflow, not to the current revision.
+  if(previous){if(previous.workflow_id!==workId)fail(409,'OPERATION_CONFLICT');return ok({ok:true,run:JSON.parse(previous.result_json),replayed:true})}
+  const wf=await workflowGet(env,w,workId);
+  const dig=await normalizedPayload('run', {workflowId:workId,revision:wf.revision,input:wf.input_text,steps:wf.steps_json});
   if(await count(env,'runs',w)>=MAX.runs)fail(429,'RUN_QUOTA_REACHED');
   const graph=await runGraph(wf.input_text,validateSteps(JSON.parse(wf.steps_json))),run={id:crypto.randomUUID(),workflowId:workId,workflowRevision:wf.revision,status:'succeeded',output:graph,createdAt:Date.now()};
   await env.DB.prepare('INSERT OR IGNORE INTO runs(id,workspace_id,workflow_id,workflow_revision,op_key,input_digest,result_json,created_at) VALUES(?,?,?,?,?,?,?,?)').bind(run.id,w,workId,wf.revision,op,dig,JSON.stringify(run),run.createdAt).run();

@@ -23,3 +23,22 @@ test('workflow graph save update stale fence run receipt and deterministic repla
 test('workflow run to persistent Knowledge doc to Unicode retrieval and saved evaluation',async()=>{const e=env(),g=await guest(e);const wf=await call(e,'/apps/api/workflows','POST',{operationId:uuid(),name:'Translate',input:'Greek λογική and multilingual evidence. Evidence matters.',steps:['normalize','keywords']},g.cookie);const run=await call(e,'/apps/api/runs','POST',{operationId:uuid(),workflowId:wf.json.workflow.id},g.cookie);const dr=await call(e,'/apps/api/documents','POST',{operationId:uuid(),sourceRunId:run.json.run.id,title:'Imported evidence'},g.cookie);const doc=dr.json.document;const actual=await call(e,'/apps/api/documents/'+doc.id,'GET',undefined,g.cookie);assert.match(actual.json.document.text,/λογική/);const search=await call(e,'/apps/api/search?q='+encodeURIComponent('λογική'), 'GET',undefined,g.cookie);assert.equal(search.status,200);assert.equal(search.json.results[0].documentId,doc.id);assert.match(search.json.results[0].passage.text,/λογική/);const eval1=await call(e,'/apps/api/evaluations','POST',{operationId:uuid(),cases:[{query:'λογική',expectedDocumentId:doc.id}]},g.cookie);assert.equal(eval1.json.evaluation.accuracy,100);const saved=await call(e,'/apps/api/evaluations','GET',undefined,g.cookie);assert.equal(saved.json.evaluations.length,1);});
 test('cannot read another workspace workflow run documents or evaluations',async()=>{const e=env(),a=await guest(e),b=await guest(e);const wf=await call(e,'/apps/api/workflows','POST',{operationId:uuid(),name:'private',input:'secret document',steps:['sha256']},a.cookie);assert.equal((await call(e,'/apps/api/workflows','GET',undefined,b.cookie)).json.workflows.length,0);const run=await call(e,'/apps/api/runs','POST',{operationId:uuid(),workflowId:wf.json.workflow.id},a.cookie);assert.equal((await call(e,'/apps/api/runs/'+run.json.run.id,'GET',undefined,b.cookie)).status,404);const doc=await call(e,'/apps/api/documents','POST',{operationId:uuid(),title:'Secret',text:'sensitive source'},a.cookie);assert.equal((await call(e,'/apps/api/documents/'+doc.json.document.id,'GET',undefined,b.cookie)).status,404);assert.equal((await call(e,'/apps/api/search?q=sensitive','GET',undefined,b.cookie)).json.results.length,0);});
 test('reject unsupported steps and long input',async()=>{const e=env(),g=await guest(e);for(const b of [{name:'Bad',input:'hi',steps:['eval']},{name:'Bad',input:'hi',steps:Array(9).fill('normalize')},{name:'Bad',input:'a'.repeat(2001),steps:['normalize']}]){const r=await call(e,'/apps/api/workflows','POST',{operationId:uuid(),...b},g.cookie);assert.equal(r.status,422)} });
+
+test('run replay remains idempotent after workflow revision and rejects another workflow',async()=>{
+ const e=env(),g=await guest(e);
+ const created=await call(e,'/apps/api/workflows','POST',{operationId:uuid(),name:'Replay case',input:'old original source',steps:['normalize','sha256']},g.cookie);
+ assert.equal(created.status,201);
+ const workflowId=created.json.workflow.id,operationId=uuid();
+ const first=await call(e,'/apps/api/runs','POST',{workflowId,operationId},g.cookie);
+ assert.equal(first.status,201);
+ const edited=await call(e,'/apps/api/workflows','POST',{id:workflowId,expectedRevision:1,operationId:uuid(),name:'Replay case revised',input:'new source text',steps:['lowercase']},g.cookie);
+ assert.equal(edited.status,200);
+ const replay=await call(e,'/apps/api/runs','POST',{workflowId,operationId},g.cookie);
+ assert.equal(replay.status,200);
+ assert.equal(replay.json.replayed,true);
+ assert.deepEqual(replay.json.run,first.json.run);
+ const other=await call(e,'/apps/api/workflows','POST',{operationId:uuid(),name:'Unrelated',input:'third source text',steps:['sha256']},g.cookie);
+ const conflict=await call(e,'/apps/api/runs','POST',{workflowId:other.json.workflow.id,operationId},g.cookie);
+ assert.equal(conflict.status,409);
+ assert.equal(conflict.json.error,'OPERATION_CONFLICT');
+});
