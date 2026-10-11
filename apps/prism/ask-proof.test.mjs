@@ -29,7 +29,7 @@ test('verified links are not uncontrolled arbitrary URLs, and preserve existing 
 });
 test('recruiter evidence answer explicitly distinguishes server, browser, and pending contract work',async()=>{
  const html=await(await get()).text();
- for(const statement of ['a test link does not represent employer review','not an atomic Agent run','packaged SDK and MCP pending','offline EVM still unqualified','not automatically in main']){
+ for(const statement of ['a test link does not represent employer review','not an atomic Agent run','packaged SDK and MCP pending','four allowlisted','not automatically in main']){
    assert.ok(html.includes(statement),statement);
  }
 });

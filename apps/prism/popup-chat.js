@@ -95,8 +95,9 @@ document.addEventListener('click',e=>{
  if(url.origin===location.origin&&url.pathname==='/'&&url.hash==='#ask'){e.preventDefault();openChat()}
 },true);
 function quick(q){
+ if(/\b(contract|evm|bytecode|solidity)\b/i.test(q))return{text:'Contract Lab now executes four actual allowlisted offline bytecode scenarios with EthereumJS EVM 10.1.3, returning observed gas, opcode steps, RETURN/REVERT/out-of-gas outcomes and a reproducible SHA-256 receipt. This does not deploy a Solidity contract, access a wallet, or send a blockchain transaction.',refs:[['Run Contract Lab','/apps/contract/'],...links.apps,...links.evidence]};
  if(/contact|hire|job|interview|recruit|resume|résumé/i.test(q))return {text:'For roles in AI engineering or full-stack software, you can review my résumé and contact me directly. My interactive demos and public repositories provide inspectable evidence, not guaranteed employment outcomes.',refs:[...links.hire,...links.evidence]};
- if(/apps|demo|try|run|source|proof|verify/i.test(q))return {text:'Explore all ten independently routed applications. Workflow/Knowledge and bounded Agent/Workbench use real guest API operations; several other demos are browser-local, and Contract Lab still needs qualified offline EVM execution.',refs:[...links.apps,...links.evidence]};
+ if(/apps|demo|try|run|source|proof|verify/i.test(q))return {text:'Explore all ten independently routed applications. Workflow/Knowledge and bounded Agent/Workbench use real guest API operations; several other demos are browser-local, and Contract Lab runs bounded offline EVM bytecode with no real chain transfers.',refs:[...links.apps,...links.evidence]};
  return null;
 }
 function parseFrames(buffer,onEvent,final=false){

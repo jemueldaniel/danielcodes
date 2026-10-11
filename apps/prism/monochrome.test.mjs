@@ -50,12 +50,12 @@ test('monochrome catalog maintains ten independently identified apps',async()=>{
  assert.equal(ids(catalog).length,new Set(ids(catalog)).size);
 });
 
-test('five microapps use grayscale and Interface Lab has inline focus panel, no modal',async()=>{
+test('five microapps preserve dark modes and Interface Lab has inline focus panel, no modal',async()=>{
  for(const slug of ['code','project','interface','social','contract']){
   const page=await html(microapps,'/apps/'+slug+'/');
-  match(page,/id="workform-mono-v3"/);
-  match(page,/<a class="ask" href="\/\#ask">Ask Daniel/);
-  match(page,/position:relative!important/);
+  if(slug==='contract')assert.match(page,/EthereumJS EVM 10.1.3/);else match(page,/id="workform-mono-v3"/);
+  if(slug==='contract')match(page,/href="\/\#ask"/);else match(page,/<a class="ask" href="\/\#ask">Ask Daniel/);
+  if(slug!=='contract')match(page,/position:relative!important/);
   match(page,/prefers-reduced-motion/);
   assert.doesNotMatch(page,/<script[^>]*src="https?:/i);
  }
