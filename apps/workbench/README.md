@@ -30,7 +30,7 @@ Fresh public HTTPS integration acceptance completed **16/16 checks (exit code 0)
 
 Separate Worker route dispatch was independently checked for successful HTML, JavaScript and health, 404 unknown paths and 405 unsupported methods. The production health, HTML and JS endpoints returned HTTP 200 after release.
 
-**Not yet qualified:** native browser click/keyboard/mobile acceptance specifically for this new Workbench, packaged SDK, actual MCP interoperability, full multi-tenant production assurance, complete ten-app implementation, independent all-app security audit and complete app catalog integration. The Workbench must not be labeled as a full SDK or MCP demonstration.
+**Not yet qualified:** Safari, Firefox, independent screen-reader and physical-device acceptance, packaged SDK, actual MCP interoperability, full multi-tenant production assurance, complete ten-app implementation, independent all-app security audit and live catalog integration. Microsoft Edge desktop browser interaction and 320/390/768/1440 CSS-pixel responsive widths are separately verified below. The Workbench must not be labeled as a full SDK or MCP demonstration.
 
 
 ## Native browser acceptance (Edge / Chromium)
