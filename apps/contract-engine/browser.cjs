@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict'),http=require('node:http'),fs=require('node:fs/promises'),path=require('node:path');
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'C:/Users/xlqxl/node_modules/playwright-core');
-const executablePath=process.env.PLAYWRIGHT_EXECUTABLE||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright-core');
+const executablePath=process.env.PLAYWRIGHT_EXECUTABLE||undefined;
 (async()=>{
  const [micro,prism]=await Promise.all([import('../prism/microapps-worker.mjs'),import('../prism/worker.mjs')]);
  const server=http.createServer(async(req,res)=>{
@@ -14,7 +14,7 @@ const executablePath=process.env.PLAYWRIGHT_EXECUTABLE||'C:/Program Files (x86)/
  });
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const origin='http://127.0.0.1:'+server.address().port;
- const browser=await chromium.launch({headless:true,executablePath,args:['--no-first-run','--disable-extensions']});
+ const browser=await chromium.launch({headless:true,...(executablePath?{executablePath}:{}),args:['--no-first-run','--disable-extensions']});
  let count=0;const errors=[],outsides=[];function check(ok,label){assert.ok(ok,label);count++;console.log('PASS',label)}
  try{
  for(const width of [320,390,768,1440]){

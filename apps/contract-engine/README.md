@@ -22,7 +22,7 @@ cd apps/contract-engine
 npm ci --ignore-scripts
 node --test engine.test.mjs
 node build.mjs
-node browser.cjs
+node browser.cjs # Requires installed browser; use PLAYWRIGHT_EXECUTABLE to point at Edge/Chromium if needed
 ```
 
 Browser acceptance runs real Microsoft Edge (Playwright Core) at 320, 390, 768, 1440, exercises all four real bytecode scenarios, bytecode/gas/trace/receipt, full-color Ask Daniel, focus/Escape, overflow and zero external network/RPC. The checked-in `bundle.js` must be reproducible from the checked-in package lock, `engine.mjs` and `client.mjs`. Existing shared Cloudflare routing serves it from `/apps/contract/app.js` with the current Worker, no additional Worker or DNS route.
