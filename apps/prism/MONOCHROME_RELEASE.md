@@ -1,5 +1,21 @@
 # Workform Monochrome V3 — release and evidence ledger
 
+## October 11 verified recruiter journey and evidence route — latest checkpoint
+
+This checkpoint supersedes the earlier 9/12 palette count and the earlier "evidence source-only" status below. Those entries remain as historical evidence of progression rather than being silently rewritten.
+
+- **Ask Daniel on the production homepage now offers a deterministic, evidence-grounded path for common recruiter questions.** An earlier live stream had responded HTTP 200 yet emitted unusable "[link to publicly available ...]" placeholder text. The updated public Worker contains an allowlisted set of real live demo, source, test, résumé and contact links. The affected recruiter prompts return clickable real destinations without unnecessary model calls; open-ended questions continue through the original streaming assistant.
+- **Live Edge acceptance: 19/19** for the grounded recruiter interaction: verified Workflow Studio, code and regression-test links, no placeholder links for the tested query, working "Proof + demos" prompt, zero JavaScript errors, four CSS widths and no visible fixed overlays. This is not an evaluation of all possible open-ended model answers.
+- **All five homepage case studies have public verification links** to related reference examples, including DanielWorks React source (projects/evidence-workbench/web/App.tsx), event-outbox reliability source (examples/event_outbox/README.md), and bounded Rust language source (projects/bounded-lang/README.md). These are explicitly relevant public references, not identical copies of private systems.
+- **Production /apps/evidence/ is now monochrome.** The new independent read-only Worker jemuel-workform-evidence-mono-v3 has no database binding and serves the separately reviewed evidence page with working category filters and a DanielWorks source link. Source tests passed 7/7; a fresh live Microsoft Edge run passed **20/20** checks, including filters, four responsive widths, neutral sampled body colors, no overflow, zero visible fixed overlays and no page JavaScript errors.
+- A fresh read-only audit of twelve public URLs returned **HTTP 200 on all twelve**, zero horizontal overflow and zero visible fixed overlays at the tested mobile width. **Ten of twelve** had neutral sampled computed colors; the remaining old-color routes are /apps/live/ (server-backed Workflow/Knowledge) and /apps/pay/ (fictional browser-tab ledger).
+- The previously blocked presentation-only Studio/Pay Worker upload remains blocked, was not retried, and was not circumvented through this unrelated read-only evidence route. The existing D1 guest API and its storage were not modified. Private job correspondence and company code remain outside the public corpus.
+
+These results do not certify the full ten-app backend, independent model quality, Safari/Firefox/physical-device accessibility, complete offline EVM, or hiring outcomes.
+
+---
+
+
 **Date:** 2026-10-11 (Asia/Manila). **Branch:** `feat/workform-monochrome-no-overlays-20261011`, stacked on the existing Prism design draft. This is a public design and sample-app project. It is not a certified production hiring platform.
 
 ## Design principles
