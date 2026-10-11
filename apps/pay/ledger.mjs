@@ -25,6 +25,13 @@ function verify(state){
  if(JSON.stringify(state.balances)!==JSON.stringify(balances)||balances.A.value+balances.B.value!==2000)fail('CORRUPT_LEDGER_STATE');
  return {ok:true,fictionalSupply:2000,transfers:state.transfers.length};
 }
+// Explicit local-only recovery path. Corrupted data is never trusted or
+// silently interpreted; the person must choose to clear this browser-tab demo.
+export function clearFictionalLedgerTab(storage){
+ if(!storage||typeof storage.removeItem!=='function')fail('INVALID_STORAGE');
+ try{storage.removeItem(KEY);}catch{fail('TAB_STORAGE_UNAVAILABLE');}
+ return true;
+}
 export function createFictionalLedger(storage){
  if(!storage||typeof storage.getItem!=='function'||typeof storage.setItem!=='function'||typeof storage.removeItem!=='function')fail('INVALID_STORAGE');
  let state;
