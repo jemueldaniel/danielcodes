@@ -27,7 +27,9 @@ test('catalog is swipeable with exact ten honest cards and filter compatibility'
  assert.match(h,/#appGrid\{display:flex!important/);
  assert.match(h,/scroll-snap-type:x mandatory/);
  assert.match(h,/new MutationObserver\(filterChanged\)/);
- assert.match(h,/var storedTheme=localStorage.getItem\('workform-site-theme'\)/);
+ assert.match(h,/class="catalog-ask-circle" href="\/#ask"/);
+ assert.match(h,/aria-label="Ask Daniel — open the portfolio assistant"/);
+ assert.match(h,/var storedTheme=localStorage.getItem\('danielcodes-theme'\)/);
  assert.match(h,/data-filter="local"/);assert.match(h,/id="appSearch"/);
 });
 test('five independent apps use dark-first palette and a real Ask link',async()=>{
