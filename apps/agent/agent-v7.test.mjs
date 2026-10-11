@@ -1,0 +1,40 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import agent from './worker.mjs';
+const page=async()=>await(await agent.fetch(new Request('https://jemueldaniel.website/apps/agent/'))).text();
+test('agent v7 inspector uses truthful server trace and four bounded stages',async()=>{
+ const html=await page();
+ assert.match(html,/id="agentInspector"/);
+ assert.match(html,/id="agentInspectorLedger"/);
+ assert.match(html,/id="agentInspectorReceipt"/);
+ assert.match(html,/id="agentInspectorCopy"[^>]*disabled/);
+ assert.match(html,/id="agentInspectorStages">0 \/ 4/);
+ assert.match(html,/No AI model calls, blockchain operations, or confidential source data/);
+ assert.match(html,/src="\/apps\/agent\/inspector.js"/);
+ assert.doesNotMatch(html,/aria-modal="true"/);
+ const jsResp=await agent.fetch(new Request('https://jemueldaniel.website/apps/agent/inspector.js'));
+ assert.equal(jsResp.status,200);
+ assert.match(jsResp.headers.get('content-type'),/application\/javascript/);
+ const js=await jsResp.text();
+ assert.doesNotThrow(()=>new Function(js));
+ for(const pattern of [/new MutationObserver\(queue\)\.observe\(trace/,/JSON\.parse\(trace\.textContent\)/,/isObserved\(event\)/,/sourceRunId/,/contentSha256/,/clip\(run\?\.evidence\?\.runId\)/,/copy\.disabled=!receipt/,/issueAfter\(events,verifiedIndex\)/,/textContent=typeof raw/])assert.match(js,pattern);
+});
+test('all existing API contracts survive unchanged and restricted routes reject mutations',async()=>{
+ const client=await agent.fetch(new Request('https://jemueldaniel.website/apps/agent/client.js'));
+ assert.equal(client.status,200);assert.match(await client.text(),/SELECTED_SOURCE_HAS_NO_MATCH/);
+ const health=await agent.fetch(new Request('https://jemueldaniel.website/apps/agent/health'));
+ assert.equal(health.status,200);
+ const data=await health.json();assert.equal(data.atomicAgentReceipt,false);assert.equal(data.sharedGuestApi,true);
+ assert.equal((await agent.fetch(new Request('https://jemueldaniel.website/apps/agent/nope'))).status,404);
+ assert.equal((await agent.fetch(new Request('https://jemueldaniel.website/apps/agent/',{method:'POST'}))).status,405);
+});
+test('all inline script syntax is valid and only native expandable proofs are exposed',async()=>{
+ const html=await page();
+ assert.equal((html.match(/class="agent-inspector"/g)||[]).length,1);
+ assert.match(html,/<ol class="agent-inspector-ledger"/);
+ assert.match(html,/@media\(prefers-reduced-motion:reduce\)/);
+ assert.match(html,/max-width:520px/);
+ assert.match(html,/role="status" aria-live="polite"/);
+ assert.match(html,/aria-label="Sanitized verified receipt"/);
+ assert.doesNotMatch(html,/<iframe|onclick=|<dialog/i);
+});
