@@ -11,7 +11,7 @@ test('dark Agent UI renders evidence-driven execution stages and retains APIs',a
  assert.match(html,/color-scheme:dark!important/);
  const js=await(await agent.fetch(request('/apps/agent/client.js'))).text();
  assert.match(js,/function updateAgentVisual/);
- assert.match(js,/step==='verify'/);
+ assert.match(js,/'verify':4/);
  assert.match(js,/sourceRunId/);
  assert.doesNotThrow(()=>new Function(js));
 });
