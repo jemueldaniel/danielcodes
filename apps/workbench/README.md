@@ -31,3 +31,19 @@ Fresh public HTTPS integration acceptance completed **16/16 checks (exit code 0)
 Separate Worker route dispatch was independently checked for successful HTML, JavaScript and health, 404 unknown paths and 405 unsupported methods. The production health, HTML and JS endpoints returned HTTP 200 after release.
 
 **Not yet qualified:** native browser click/keyboard/mobile acceptance specifically for this new Workbench, packaged SDK, actual MCP interoperability, full multi-tenant production assurance, complete ten-app implementation, independent all-app security audit and complete app catalog integration. The Workbench must not be labeled as a full SDK or MCP demonstration.
+
+
+## Native browser acceptance (Edge / Chromium)
+
+On 11 October 2026, the separate `browser-acceptance.cjs` Playwright run used Microsoft Edge on the authorized Windows machine and passed **17/17 real live-browser checks**, exiting 0:
+
+- Live HTML navigation and expected application heading
+- Keyboard-driven creation of a real D1 guest workspace
+- Mouse-driven save, server execution and persisted run-history readback
+- Workflow artifact import, document retrieval, measured evaluation, identical-operation replay without duplicate effect
+- Saved evaluation readback after reloading the actual page
+- No horizontal overflow at 320, 390, 768, or 1440 CSS pixels
+- Zero unhandled application JavaScript exceptions
+- Final test-workspace deletion
+
+This is actual browser acceptance for the tested Workbench interaction path, **not** independent screen-reader testing, Safari/Firefox acceptance, load testing, production-scale security certification, or deployment of the complete ten-app suite. No private credentials or user documents were used.
