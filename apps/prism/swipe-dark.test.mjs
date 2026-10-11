@@ -51,6 +51,6 @@ test('social is actionable, honest and entirely synthetic',async()=>{
  const js=await read(micro,'/apps/social/app.js');
  assert.doesNotThrow(()=>new Function(js));
  assert.match(js,/aria-pressed/);assert.match(js,/bookmarks/);
- assert.match(js,/follows/);assert.match(js,/post\.likes/);assert.match(js,/sessionStorage\.setItem/);
+ assert.match(js,/follows/);assert.match(js,/p\.likes|x\.likes/);assert.match(js,/sessionStorage\.setItem/);
  assert.doesNotMatch(js,/fetch\(|XMLHttpRequest|WebSocket|innerHTML\s*=/);
 });
