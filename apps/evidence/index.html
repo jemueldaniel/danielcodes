@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -31,6 +31,13 @@ html,body{max-width:100%;overflow-x:clip!important}body{background:var(--bg)!imp
 a:focus-visible,button:focus-visible{outline:3px solid var(--accent)!important;outline-offset:3px!important}
 @media(max-width:600px){.wrap{width:calc(100% - 28px)!important}.hero{padding:26px 0 22px!important}.hero h1{font-size:clamp(34px,9vw,50px)!important}.nav{gap:7px!important}.action{flex:1 1 calc(50% - 8px)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;transform:none!important;scroll-behavior:auto!important}}
+</style><style id="evidence-dark-first">
+:root[data-theme=dark]{color-scheme:dark;--bg:#090909;--surface:#171717;--text:#f9f9f9;--muted:#c5c5c5;--line:#454545;--panel:#242424;--strong:#fff;--accent:#fff;--shadow:rgba(0,0,0,.23)}
+body{background:#090909;color:#f9f9f9;padding-bottom:78px}
+.evidence-ask-circle{position:fixed;bottom:calc(15px + env(safe-area-inset-bottom));left:max(15px,env(safe-area-inset-left));width:58px;height:58px;border-radius:50%;border:1px solid #707070;background:#242424;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:35}
+.evidence-ask-circle img{width:44px;height:44px;border-radius:50%;object-fit:cover;filter:grayscale(1)}
+.evidence-ask-circle:focus-visible{outline:3px solid #fff;outline-offset:4px}
+@media(prefers-reduced-motion:reduce){.evidence-ask-circle{transition:none;transform:none!important}}
 </style></head>
 <body>
 <a class="skip" href="#main">Skip to engineering evidence</a>
@@ -54,7 +61,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent)!important;o
 <script>
 (()=>{'use strict';
 const root=document.documentElement,theme=document.getElementById('theme');
-try{if(localStorage.getItem('danielcodes-theme')==='dark')root.dataset.theme='dark';}catch{}
+try{const preferred=localStorage.getItem('danielcodes-theme');if(preferred==='dark'||preferred==='light')root.dataset.theme=preferred;}catch{}
 function syncTheme(){const dark=root.dataset.theme==='dark';theme.textContent=dark?'Light mode':'Dark mode';theme.setAttribute('aria-pressed',String(dark));}
 syncTheme();theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('danielcodes-theme',root.dataset.theme);}catch{}syncTheme();});
 const buttons=[...document.querySelectorAll('[data-filter]')],cards=[...document.querySelectorAll('[data-category]')],status=document.getElementById('filter-status');
@@ -64,4 +71,4 @@ function show(group){let count=0;for(const item of cards){const visible=group===
 for(const b of buttons)b.addEventListener('click',()=>show(b.dataset.filter));
 })();
 </script>
-</body></html>
+<a class="evidence-ask-circle" href="/#ask" aria-label="Ask Daniel — open the portfolio assistant"><img src="/assets/portrait.jpg" width="44" height="44" alt=""></a></body></html>
