@@ -14,7 +14,7 @@ const launch=process.env.PLAYWRIGHT_EXECUTABLE||undefined;
   }catch(e){res.writeHead(500);res.end(e.stack)}
  });
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
- const origin='http://127.0.0.1:'+server.address().port;
+ const origin=process.env.WORKFORM_LIVE_ORIGIN==='https://jemueldaniel.website' ? 'https://jemueldaniel.website' : ('http://127.0.0.1:'+server.address().port);
  const browser=await chromium.launch({headless:true,...(launch?{executablePath:launch}:{}),args:['--no-first-run','--disable-extensions']});
  let count=0,errors=[];
  function verify(value,label){assert.ok(value,label);count++;console.log('PASS',label)}
