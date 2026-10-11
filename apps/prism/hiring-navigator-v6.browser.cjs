@@ -12,7 +12,9 @@ const executablePath=process.env.PLAYWRIGHT_EXECUTABLE||'C:/Program Files (x86)/
   }catch(error){res.writeHead(500);res.end(error.stack)}
  });
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- const origin='http://127.0.0.1:'+server.address().port;
+ const remote=process.env.WORKFORM_LIVE_ORIGIN;
+ if(remote&&remote!=='https://jemueldaniel.website')throw Error('Live origin must be the authorized portfolio domain');
+ const origin=remote||'http://127.0.0.1:'+server.address().port;
  const browser=await chromium.launch({headless:true,executablePath,args:['--no-first-run','--disable-extensions']});
  const ids=['workflow','knowledge','agent','social','pay','workbench','code','contract','interface','project'];
  const routes=['/apps/live/#workflow','/apps/live/#knowledge','/apps/agent/','/apps/social/','/apps/pay/','/apps/workbench/','/apps/code/','/apps/contract/','/apps/interface/','/apps/project/'];
