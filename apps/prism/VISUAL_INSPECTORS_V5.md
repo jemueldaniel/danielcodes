@@ -1,6 +1,6 @@
 # Workform V5 — Visual Inspector Upgrade
 
-**Status:** independently authored source candidate on a review branch; not evidence of a public Cloudflare deployment.
+**Status:** publicly released on October 12, 2026 at approximately 05:16 Asia/Manila to the existing narrowly scoped Cloudflare microapps Worker; source remains reviewable on a stacked PR.
 
 ## What actually runs
 
@@ -31,13 +31,14 @@ npm install --no-save playwright-core
 node apps/prism/visual-inspectors-v5.browser.cjs
 ```
 
-For locally installed Edge, set `PLAYWRIGHT_EXECUTABLE` to the browser binary; for a nonstandard Playwright module location, set `PLAYWRIGHT_MODULE` to its local module path. The browser acceptance harness starts an ephemeral localhost server and closes both the server and browser. It uses **real runtime module bytes**, not a screenshot or mock result.
+For locally installed Edge, set `PLAYWRIGHT_EXECUTABLE` to the browser binary; for a nonstandard Playwright module location, set `PLAYWRIGHT_MODULE` to its local module path. Set `WORKFORM_LIVE_ORIGIN=https://jemueldaniel.website` to repeat identical assertions against the public release (otherwise the harness starts an ephemeral localhost server). It always closes both browser and local server. The only accepted remote override is the project’s own domain. It uses **real runtime module bytes**, not a screenshot or mock result.
 
-Verified local execution on October 12, 2026: **10/10 new Node contracts**, **54/54 existing scoped Node regressions**, and **48/48 browser acceptance assertions** across 320, 390, 768 and 1440px (Code), as well as Project and Interface exercise/reload/focus tests on compact phones. Separate deployment verification is still required.
+Verified October 12, 2026: **10/10 new Node contracts**, **54/54 existing scoped Node regressions**, **48/48 localhost browser assertions**, **48/48 independently repeated public HTTPS browser assertions** (320/390/768/1440px for Code, including source errors and focus; Project save/compare/restore/reload; Interface native interactions and focus return). Separate live homepage/gallery/Social/Ask regressions also passed **37/37** and **18/18** after deployment. All were Microsoft Edge real browser checks, not static screenshots.
 
 ## Scope and release boundary
 
 - Only the existing `apps/prism/microapps-worker.mjs` five-route presentation Worker and new test files are modified. Its Social and Contract pages are byte-for-byte the existing page templates; no auth, D1, DNS, wallet, real-chain calls or Caster startup IP are modified or copied.
 - This source is intended to be reviewed **on top of** `feat/workform-swipe-dark-demos-20261011`. Keep staged pull requests and deployed revisions intact.
 - **Do not use this as permission to publish the unrelated Pay/Studio presentation changes** that were held by earlier tool safety controls. Contract Lab remains a qualification-only interface until an actual independently tested offline EVM is available.
-- Public Cloudflare deployment requires verifying current Worker version and routing, then separate real-domain browser readback. Source tests alone do not establish a live release.
+- **Released and verified:** Cloudflare account owning the active `jemueldaniel.website` zone, Worker `jemuel-workform-microapps-v2`, deployment ID `54757e8b-ba56-47d2-aae2-ebed9c507efa`, version `4bfd86d8-9d54-4207-986a-bccf1d90cf09` at **100%**, exact deployed blob SHA-1 `0768fce5f948e9b00e6f51984cf9409696b04125` (matches the original publicly committed Worker byte-for-byte). Before upload, previous production SHA `4cdd0f8349df67b03b2a6e028635a14963728a92` was verified against the V4 GitHub branch; account bindings remained zero, compatibility date unchanged, routes preserved. After upload, independent Cloudflare readback matched new SHA, and all 48 live browser assertions passed.
+- **Unchanged/honest limits:** this UI release upgrades only Code, Project, and Interface visuals; Social and Contract templates and their scopes are preserved. It does **not** qualify Contract EVM runtime, Pay payments, real auth, or full ten-app backend integration, and does not change the prior safety-held Pay/Studio presentation releases.
