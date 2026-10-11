@@ -49,3 +49,13 @@ test('no private job tracker text or remote injected script',()=>{
   assert.ok(!/<script[^>]*\bsrc="https?:/i.test(html),name+' external script');
  }
 });
+
+
+test('Developer Workbench link names real HTTP scope without SDK or MCP claims',()=>{
+ const marker=apps.match(/<article class="card"><div class="card-top"><span class="num">06 \/ APIs<\/span>[\s\S]*?<\/article>/)?.[0];
+ assert.ok(marker,'API Workbench catalog card');
+ assert.match(marker,/Live HTTP inspector/);
+ assert.match(marker,/href="\/apps\/workbench\/"/);
+ assert.match(marker,/SDK and MCP protocol support are not yet qualified/);
+ assert.ok(apps.includes('href="/apps/workbench/"'),'Live HTTP inspector hero link');
+});
