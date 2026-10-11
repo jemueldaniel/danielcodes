@@ -26,7 +26,7 @@
 <footer>Jemuel Daniel · AI Engineer + Full-Stack Software Engineer · <a href="/apps/">Explore all ten planned apps</a> · <a href="/apps/evidence/">Review engineering evidence</a>. No statement here establishes production payments or a deployed Workform backend.</footer>
 </main>
 <script type="module">
-import {createFictionalLedger} from './ledger.mjs';
+import {createFictionalLedger,clearFictionalLedgerTab} from './ledger.mjs';
 const $=id=>document.getElementById(id);
 let store,lastIntent=null,pages=[null],page=0;
 const format=n=>new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n);
@@ -35,10 +35,10 @@ function render(){let s=store.summary();$('balance-a').textContent=format(s.bala
 function showPage(i){if(i<0||i>=pages.length)return;let r=store.history(pages[i],10);if(r.nextCursor!==null)pages[i+1]=r.nextCursor;else pages.length=i+1;page=i;$('history').textContent=JSON.stringify(r.transfers.map(t=>({seq:t.seq,opId:t.opId,from:t.from,to:t.to,amount:t.amount})),null,2);$('history-status').textContent='Fictional ledger · page '+(i+1)+' · '+r.transfers.length+' transfer(s) on this page · '+r.totalTransfers+' total.';$('newer').disabled=i===0;$('older').disabled=r.nextCursor===null;}
 function refresh(){render();pages=[null];page=0;showPage(0);}
 function outputError(err){$('operation-status').textContent='Request rejected: '+(err.code||err.message);show({ok:false,error:err.code||err.message});}
-try{store=createFictionalLedger(sessionStorage);refresh();}catch(err){$('operation-status').textContent='Local tab storage unavailable or corrupt: '+(err.code||err.message);$('transfer-form').querySelector('button[type=submit]').disabled=true;$('reset').disabled=true;show({ok:false,error:err.code||err.message});}
+try{store=createFictionalLedger(sessionStorage);refresh();}catch(err){$('operation-status').textContent='Local tab storage unavailable or corrupt: '+(err.code||err.message);$('transfer-form').querySelector('button[type=submit]').disabled=true;$('reset').textContent='Repair this tab’s demo';show({ok:false,error:err.code||err.message});}
 $('transfer-form').addEventListener('submit',e=>{e.preventDefault();if(!store)return;try{const from=$('from').value,to=$('to').value,amount=Number($('amount').value);if(!Number.isSafeInteger(amount))throw Error('Enter a whole number of test units.');const opId='tx_'+crypto.randomUUID().replaceAll('-','_');const payload={opId,from,to,amount,sourceVersion:store.summary().balances[from]?.version};const receipt=store.transfer(payload);lastIntent=payload;$('replay').disabled=false;show(receipt);$('operation-status').textContent='Test transfer saved in this browser tab. No external payment occurred.';refresh();}catch(err){outputError(err);}});
 $('replay').addEventListener('click',()=>{if(!lastIntent||!store)return;try{const r=store.transfer(lastIntent);show(r);$('operation-status').textContent='Same operation replayed. No second debit occurred.';refresh();}catch(err){outputError(err);}});
-$('reset').addEventListener('click',()=>{if(!store)return;try{store.clear();lastIntent=null;$('replay').disabled=true;show('Fictional tab data cleared. No server data was involved.');$('operation-status').textContent='Fresh isolated tab ledger ready.';refresh();}catch(err){outputError(err);}});
+$('reset').addEventListener('click',()=>{try{if(!store){clearFictionalLedgerTab(sessionStorage);store=createFictionalLedger(sessionStorage);$('transfer-form').querySelector('button[type=submit]').disabled=false;$('reset').textContent="Clear this tab's demo";}else store.clear();lastIntent=null;$('replay').disabled=true;show('Fictional tab data cleared. No server data was involved.');$('operation-status').textContent='Fresh isolated tab ledger ready.';refresh();}catch(err){outputError(err);}});
 $('older').addEventListener('click',()=>showPage(page+1));$('newer').addEventListener('click',()=>showPage(page-1));
 try{if(localStorage.getItem('danielcodes-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch{}
 function paintTheme(){const dark=document.documentElement.getAttribute('data-theme')==='dark';$('theme').setAttribute('aria-pressed',String(dark));$('theme').textContent=dark?'Light mode':'Dark mode';}
