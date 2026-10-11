@@ -21,3 +21,10 @@ The underlying guest Workform API currently allows text workflows up to eight op
 ## Acceptance
 
 Run source syntax and route behavior checks. Browser acceptance must verify guest session, sample creation, saved workflow, actual search, run and document import, digest-confirmed provenance, last-intent replay, readback after reload, responsive widths, denial without session and cleanup after the test. An HTTP 200 alone does not establish this end-to-end result.
+
+
+## Deployment and real browser acceptance — October 11, 2026
+
+Independent Cloudflare Worker `jemuel-workform-agent-public` is uploaded and attached to the exact `jemueldaniel.website/apps/agent/*` route. It does not replace the portfolio, app catalog or existing D1 guest Worker.
+
+A real Microsoft Edge / Playwright test on the live domain passed **17 checks and exited 0**, after revealing and fixing a missing `runs` entry in the frontend's static API allowlist and correcting an early-completion race in the acceptance harness. Checks included keyboard session setup, explicit sample setup, real lexical search, server run, imported document SHA-256 match, operation-key replay (both run and imported artifact), saved run/document readback after reload, 320/390/768/1440 CSS-pixel overflow checks, zero unhandled JS exceptions and explicit test-workspace deletion. Source-level routing checks passed 10/10. This is a bounded deterministic browser orchestrator, not a server-side durable atomic Agent engine.
