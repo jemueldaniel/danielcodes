@@ -1,5 +1,14 @@
 # Workform Monochrome V3 — release and evidence ledger
 
+## Final integrated regression and navigation audit — 11 October 2026
+
+- Full exact-branch Node command covering Prism, Ask proof, microapps, static guest API, labs, fictional ledger, public catalog, and independent Evidence Worker: **72/72 tests passed, 0 failures, exit code 0**.
+- A second live Microsoft Edge Ask Daniel acceptance executed all six public quick-question categories plus a recruiter interview/contact question: **16/16 checks, 0 JS errors and 0 model network requests for these deterministic verified paths**. The default streaming assistant remains available for other topics.
+- A read-only live URL audit visited twelve routes and checked **25 unique same-origin destinations, 43 fragment links, zero broken links, zero missing tested same-page fragments, and zero unlabeled anchors**. This checks navigation, not every button or external provider link.
+- Two local one-off preview processes used for browser verification were stopped after testing. An unrelated running Zed test server was identified and left untouched.
+- Current public-source branch remains a draft, not merged into main. The only production writes in this continuation were a version-fenced update to the Prism presentation Worker and an independent evidence-only Worker plus scoped evidence route. The previous Studio/Pay publication hold remains unchanged.
+
+
 ## October 11 verified recruiter journey and evidence route — latest checkpoint
 
 This checkpoint supersedes the earlier 9/12 palette count and the earlier "evidence source-only" status below. Those entries remain as historical evidence of progression rather than being silently rewritten.
