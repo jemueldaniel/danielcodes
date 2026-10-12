@@ -12,7 +12,9 @@ const executablePath=process.env.PLAYWRIGHT_EXECUTABLE||'C:\\Program Files (x86)
   res.writeHead(response.status,Object.fromEntries(response.headers));res.end(Buffer.from(await response.arrayBuffer()));
  }catch(err){res.writeHead(500);res.end(err.stack)}});
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- const origin='http://127.0.0.1:'+server.address().port, browser=await chromium.launch({headless:true,executablePath,args:['--no-first-run','--disable-extensions']});
+ const target=process.env.WORKFORM_LIVE_ORIGIN;
+ if(target&&target!=='https://jemueldaniel.website')throw Error('Only the approved public origin may be tested');
+ const origin=target||('http://127.0.0.1:'+server.address().port), browser=await chromium.launch({headless:true,executablePath,args:['--no-first-run','--disable-extensions']});
  let passed=0;const failures=[];function check(test,label){assert.ok(test,label);console.log('PASS',label);passed++}
  try{
  for(const width of [320,390,768,1440]){

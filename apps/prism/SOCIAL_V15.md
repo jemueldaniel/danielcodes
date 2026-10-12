@@ -23,3 +23,11 @@ Node: 7/7 PASS. Installed Edge Social: 145/145 PASS across 320, 390, 768, and 14
 ## Truth boundaries
 
 Fictional state lives in the same browser tab, not a public social network. It has no remote accounts, durable backend, cross-user data or cryptographic receipts. A downloaded client JSON record is not tamper-proof attestation. The existing Cloudflare microapps Worker may be published only if the live version/source/settings and new version are independently qualified. The existing safety-held Studio and Pay presentation routes must not be changed or bypassed.
+
+
+## Verified public release — October 12, 2026
+
+- Existing Cloudflare Worker `jemuel-workform-microapps-v2`, preserved without added bindings, with compatibility date `2026-10-11`. Original production Git source blob `965506fa9f3a8c9bb0f82ede8c6e25dcc001ef1d` was verified before upload; no Studio or Pay Worker modified.
+- New GitHub source commit `4928970a461e77eb19d720fce2ae576444bff996`; exact uploaded and read-back source Git blob `08114aa81e99a991be482b830b40a7351f0b8eaa` (**466,663 UTF-8 bytes**). Cloudflare deployment `d487dc1a-0d6e-47a1-9867-3596c62c3e37`, version `8723d6ec-9370-40c6-a9fd-4927045ea81b`, 100% routing.
+- Actual public HTTPS Microsoft Edge checks with `WORKFORM_LIVE_ORIGIN=https://jemueldaniel.website`: Social **145/145 PASS**, site-wide blocking overlay/nonmodal/reduced-motion audit **329/329 PASS**, spanning 320, 390, 768 and 1440px. Public runs performed independently after production source/version readback. No uncaught page errors.
+- Published release only covers the bounded fictionally scoped Social experience on the existing independent microapps Worker. The 10-app catalog is not proof that ten full backends are complete. The separate Studio and Pay presentation upgrades remain restricted.
