@@ -31,3 +31,12 @@ Design inspirations are principles, not copied source: [Apple Human Interface Gu
 ## Publication and truth boundaries
 
 These local checks alone are not production acceptance. The existing live microapps Worker must have its prior Git blob, deployment, compatibility settings and bindings independently checked before updating, with exact Github-reviewed bytes, a 100% deploy receipt, and new real HTTPS browser acceptance afterward. The separate Workflow/Knowledge Studio and Pay presentation Workers remain untouched due existing independent publication restrictions. This is an original fictional browser-local design systems demo, not physical mobile-device testing, a comprehensive accessibility audit or proof that all ten Workform applications have complete backends.
+
+## Verified public Cloudflare release — October 12, 2026
+
+- Independent pre-upload readback of the existing `jemuel-workform-microapps-v2` Worker matched the exact earlier production Git blob `08114aa81e99a991be482b830b40a7351f0b8eaa`, **466,663 UTF-8 bytes**, deployment `d487dc1a-0d6e-47a1-9867-3596c62c3e37`, version `8723d6ec-9370-40c6-a9fd-4927045ea81b`, 100%. No bindings; compatibility date `2026-10-11`.
+- Authorized personal GitHub branch source commit `804ed7c9e87d3fed4a94865365b98420344b49dc` was the reviewed release source. The new Worker source Git blob `a2dfcc1be376ed18ea141d150f515b2f68d08b68` was independently read back from Cloudflare at **501,158 UTF-8 bytes**, exactly matching the reviewed GitHub blob. No Worker route, compatibility date or bindings changed.
+- New Cloudflare deployment `2fbe5db3-fa4a-4730-9436-7a550f8e8e5e`, version `251276bb-495c-4af2-8fc3-0af224b818f7`, at **100%**.
+- **Actual public HTTPS** Microsoft Edge checks at `https://jemueldaniel.website`, four widths 320/390/768/1440: new Interface Lab **188/188 PASS** including a downloaded real JSON evidence record, keyboard tab navigation, motion policy and nonmodal Ask; original V5 browser regression **48/48 PASS**; ten-route no-large-blocking-overlays/Ask **329/329 PASS**. No uncaught page errors.
+- Full independent pre-release Node regression remained **129/129 PASS**, including genuine offline EthereumJS EVM engine and isolated D1 backend test contracts. Release does not alter previously held Studio and Pay presentation Workers.
+- Live boundaries: this is a browser-local original interface systems demo, not physical device automation, native mobile certification, a WCAG audit, or proof of all ten fully built backend systems.
