@@ -1,8 +1,8 @@
 /* Reproducibly add original V15 Social experience without changing other microapps. */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=__dirname,target=path.join(root,'microapps-worker.mjs');
-const read=file=>fs.readFileSync(path.join(root,file),'utf8');
-const source=fs.readFileSync(target,'utf8');
+const read=file=>fs.readFileSync(path.join(root,file),'utf8').replace(/\r\n/g,'\n');
+const source=fs.readFileSync(target,'utf8').replace(/\r\n/g,'\n');
 const marker='/* SOCIAL_V15_COMPILED_START */',end='/* SOCIAL_V15_COMPILED_END */';
 const panel=read('social-v15-panel.html'),css=read('social-v15.css'),addon=read('social-v15-addon.js');
 assert.match(panel,/id="v15EventList"/);
