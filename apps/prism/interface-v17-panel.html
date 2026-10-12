@@ -1,0 +1,91 @@
+<section class="v17-lab" aria-labelledby="v17Heading">
+  <header class="v17-lab-head">
+    <div><p class="v17-kicker">09 / DANIEL INTERFACE LAB <span>RELEASE 17</span></p>
+      <h2 id="v17Heading">Design decisions you can operate.</h2>
+      <p>Change a real preview, run its interactions and inspect measured browser state. Built for keyboard, touch and motion-aware browsing.</p>
+    </div>
+    <div class="v17-head-proof"><span class="v17-proof-indicator" aria-hidden="true"></span> BROWSER-LOCAL / NO BACKDROP</div>
+  </header>
+  <div class="v17-surface">
+    <aside class="v17-settings" aria-labelledby="v17SettingsTitle">
+      <h3 id="v17SettingsTitle">Control surface</h3>
+      <p>Only change what the visitor sees.</p>
+      <fieldset class="v17-setting" id="v17ViewportGroup">
+        <legend>Viewport <span>SIMULATED</span></legend>
+        <div class="v17-options" aria-label="Preview viewport">
+          <button type="button" data-v17-width="320" aria-pressed="false">320</button>
+          <button type="button" data-v17-width="390" aria-pressed="true">390</button>
+          <button type="button" data-v17-width="768" aria-pressed="false">768</button>
+        </div>
+      </fieldset>
+      <fieldset class="v17-setting" id="v17MotionGroup">
+        <legend>Motion <span>USER CONTROLLED</span></legend>
+        <div class="v17-options v17-motion-options" aria-label="Motion mode">
+          <button type="button" data-v17-motion="quiet" aria-pressed="false">Quiet</button>
+          <button type="button" data-v17-motion="precise" aria-pressed="true">Precise</button>
+          <button type="button" data-v17-motion="expressive" aria-pressed="false">Fluid</button>
+        </div>
+      </fieldset>
+      <fieldset class="v17-setting" id="v17ThemeGroup">
+        <legend>Contrast <span>PREVIEW ONLY</span></legend>
+        <div class="v17-options v17-two" aria-label="Preview theme contrast">
+          <button type="button" data-v17-theme="ink" aria-pressed="true">Ink</button>
+          <button type="button" data-v17-theme="contrast" aria-pressed="false">High</button>
+        </div>
+      </fieldset>
+      <button type="button" class="v17-wide" id="v17Measure">Measure accessibility <span aria-hidden="true">↗</span></button>
+      <p class="v17-note">This is a responsive component simulation, not a physical-device emulator or a WCAG certification.</p>
+    </aside>
+    <div class="v17-preview-bay" aria-label="Live component preview">
+      <div class="v17-preview-head"><span><i aria-hidden="true"></i> LIVE COMPONENT</span><span id="v17PreviewWidth">390 CSS px requested</span></div>
+      <div class="v17-preview-stage">
+        <article class="v17-device" id="v17Device" data-motion="precise" data-contrast="ink" aria-labelledby="v17DeviceHeading">
+          <header class="v17-device-top"><span class="v17-wordmark">D<span class="v17-wordmark-dot">.</span> / STUDIO</span>
+            <button type="button" class="v17-icon-button" id="v17Save" aria-pressed="false" aria-label="Save preview item">☆</button>
+          </header>
+          <div class="v17-device-heading"><span class="v17-overline">INTERACTION STUDY / 001</span>
+            <h3 id="v17DeviceHeading">The space between intent and feedback.</h3>
+            <p>One working experience. Every action changes real local state.</p>
+          </div>
+          <div class="v17-tablist" role="tablist" aria-label="Preview views">
+            <button role="tab" id="v17TabOverview" type="button" data-v17-tab="overview" aria-controls="v17TabPanel" aria-selected="true" tabindex="0">Overview</button>
+            <button role="tab" id="v17TabSystems" type="button" data-v17-tab="systems" aria-controls="v17TabPanel" aria-selected="false" tabindex="-1">Systems</button>
+            <button role="tab" id="v17TabActivity" type="button" data-v17-tab="activity" aria-controls="v17TabPanel" aria-selected="false" tabindex="-1">Activity</button>
+          </div>
+          <div id="v17TabPanel" class="v17-view" role="tabpanel" tabindex="0" aria-labelledby="v17TabOverview">
+            <div class="v17-visual" aria-hidden="true">
+              <div class="v17-orbit" id="v17Orbit"><span></span><span></span><span></span><b>17</b></div>
+              <div class="v17-visual-meta"><span id="v17ViewCode">A / 01</span><span>ORIGINAL UI</span></div>
+            </div>
+            <div class="v17-view-description">
+              <p class="v17-overline" id="v17ViewLabel">THE LIVE SYSTEM</p>
+              <h4 id="v17ViewTitle">Designed to respond.</h4>
+              <p id="v17ViewBody">Try a tab, save the work, or run the motion. The inspector records the resulting changes rather than inventing a success state.</p>
+            </div>
+            <div class="v17-progress" aria-label="Interaction completion"><span id="v17ProgressFill" style="width:15%"></span></div>
+            <div class="v17-progress-caption"><span>Interaction coverage</span><strong id="v17ProgressLabel">15%</strong></div>
+            <button type="button" class="v17-primary" id="v17Run">Run interaction <span aria-hidden="true">↗</span></button>
+            <p class="v17-feedback" id="v17Feedback" role="status" aria-live="polite">Ready to inspect.</p>
+          </div>
+          <footer class="v17-device-foot"><span>PRIVATE DEMO SESSION</span><span>NO NETWORK ACTION</span></footer>
+        </article>
+      </div>
+      <p class="v17-canvas-caption">Actual rendered width: <strong id="v17ActualWidth">—</strong> · Browser viewport: <strong id="v17BrowserWidth">—</strong> · The preview never exceeds its available parent.</p>
+    </div>
+    <aside class="v17-inspector" aria-labelledby="v17InspectorTitle">
+      <div class="v17-inspector-head"><div><p class="v17-kicker">OBSERVABILITY</p><h3 id="v17InspectorTitle">Interaction proof.</h3></div><span class="v17-count" id="v17EventCount">0</span></div>
+      <div class="v17-measures" aria-label="Measured accessibility outcomes">
+        <div><span>Measured tap targets</span><strong id="v17Targets">—</strong></div>
+        <div><span>Motion policy</span><strong id="v17Policy">—</strong></div>
+        <div><span>Rendered preview</span><strong id="v17Rendered">—</strong></div>
+      </div>
+      <h4>Committed actions</h4>
+      <ol class="v17-action-history" id="v17History" aria-label="Recent committed interactions"></ol>
+      <div class="v17-export-actions">
+        <button type="button" id="v17Export">Download JSON evidence <span aria-hidden="true">↓</span></button>
+        <button type="button" id="v17Reset">Reset demo</button>
+      </div>
+      <p class="v17-inspector-status" id="v17Status" role="status" aria-live="polite">Actions stay in this browser tab. No user content leaves your device.</p>
+    </aside>
+  </div>
+</section>
