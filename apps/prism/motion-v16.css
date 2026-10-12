@@ -1,0 +1,41 @@
+/* Workform V16 — original first-party motion. No overlays, loaders or third-party runtime. */
+:root { --jd-motion-ease:cubic-bezier(.2,.78,.22,1); --jd-motion-quick:180ms; --jd-motion-calm:320ms; }
+@keyframes jd-v16-enter {from{opacity:.35;transform:translate3d(0,10px,0)}to{opacity:1;transform:none}}
+@keyframes jd-v16-beacon {0%,100%{box-shadow:0 0 0 0 rgba(190,216,255,.08)}50%{box-shadow:0 0 0 6px rgba(190,216,255,.13)}}
+@media (prefers-reduced-motion:no-preference) {
+  :is(.hero h1,.hero .role,.hero .eyebrow,.hero .heroActions,.hp-app-top h2,.app-hero h1) {
+    animation:jd-v16-enter 620ms var(--jd-motion-ease) both;
+  }
+  :is(.hp-app-tile,.cap,.card,.labCard,.interfaceCard,.evidence,.proof-card,.app-card) {
+    transition:transform var(--jd-motion-calm) var(--jd-motion-ease),
+      box-shadow var(--jd-motion-calm) var(--jd-motion-ease),
+      border-color var(--jd-motion-quick) ease,background-color var(--jd-motion-quick) ease;
+  }
+  :is(.hp-app-nav button,.btn,.sourceLink,.promptChip,.filter-button,.hp-app-tile .btn) {
+    transition:transform var(--jd-motion-quick) var(--jd-motion-ease),
+      border-color var(--jd-motion-quick),background-color var(--jd-motion-quick),box-shadow var(--jd-motion-quick);
+  }
+  :is(.hp-app-nav button,.btn,.sourceLink,.promptChip,.filter-button):not(:disabled):active {
+    transform:translateY(1px) scale(.97);
+  }
+  .hp-app-screen i {transition:transform var(--jd-motion-calm) var(--jd-motion-ease),opacity var(--jd-motion-calm);}
+  #jd-popup-v9 .jd-launcher:not(:disabled):active {transform:scale(.94);}
+  #jd-popup-v9 .jd-launcher-indicator {animation:jd-v16-beacon 3.7s ease-in-out infinite;}
+}
+@media (prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine) {
+  :is(.hp-app-tile,.cap,.card,.labCard,.interfaceCard,.evidence,.proof-card,.app-card):hover {
+    transform:translateY(-4px);
+    box-shadow:0 16px 34px rgba(0,0,0,.26);
+  }
+  :is(.hp-app-tile,.cap,.card,.labCard,.interfaceCard,.evidence,.proof-card,.app-card):focus-within {
+    transform:translateY(-2px);
+  }
+  .hp-app-tile:hover .hp-app-screen i:nth-child(2) {transform:translateY(-3px);}
+  .hp-app-nav button:not(:disabled):hover {transform:translateY(-2px);}
+}
+@media(prefers-reduced-motion:reduce) {
+  :is(.hero h1,.hero .role,.hero .eyebrow,.hero .heroActions,.hp-app-top h2,.app-hero h1,
+    .hp-app-tile,.cap,.card,.labCard,.interfaceCard,.evidence,.proof-card,.app-card,.hp-app-screen i,
+    .hp-app-nav button,.btn,.sourceLink,.promptChip,.filter-button,
+    #jd-popup-v9 .jd-launcher-indicator) {animation:none!important;transition:none!important;transform:none!important;}
+}
