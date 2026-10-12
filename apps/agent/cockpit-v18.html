@@ -1,0 +1,66 @@
+<section id="agentV18Root" class="av18" aria-labelledby="av18Title">
+  <header class="av18-intro">
+    <div><p class="av18-eyebrow">APPLICATION 03 / BOUNDED AUTONOMOUS SYSTEMS <span>V18</span></p>
+      <h2 id="av18Title">An agent you can inspect.</h2>
+      <p>Run four admitted tools, follow the actual API evidence, and independently re-read the persisted result. No simulated success badges.</p></div>
+    <span class="av18-top-proof"><i aria-hidden="true"></i> FIXED PLAN · ACTUAL D1 API · NO MODEL CALL</span>
+  </header>
+  <div class="av18-shell">
+    <aside class="av18-operator" aria-labelledby="av18OperatorTitle">
+      <div class="av18-panel-kicker">01 / CONTROL</div>
+      <h3 id="av18OperatorTitle">Mission control</h3>
+      <p>Four bounded operations. No arbitrary tool invocation.</p>
+      <label for="av18Question">Knowledge search</label>
+      <input id="av18Question" type="text" maxlength="160" spellcheck="false" value="atomic evidence" placeholder="A query for your sample corpus">
+      <div class="av18-operation-buttons">
+        <button type="button" id="av18Connect"><span class="av18-index">01</span> Connect guest <span aria-hidden="true">↗</span></button>
+        <button type="button" id="av18Seed" disabled><span class="av18-index">02</span> Prepare sample <span aria-hidden="true">↗</span></button>
+        <button type="button" id="av18Execute" class="av18-main-action" disabled><span class="av18-index">03</span> Execute agent <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="av18-secondary-actions">
+        <button type="button" id="av18Retry" disabled>Retry same intent</button>
+        <button type="button" id="av18Readback" disabled>Verify readback</button>
+      </div>
+      <div class="av18-session">
+        <span class="av18-mono">SESSION SCOPE</span><strong id="av18Session">NOT CONNECTED</strong>
+        <span>Temporary guest-owned API records. No account or private files.</span>
+      </div>
+      <button type="button" id="av18Reset" class="av18-delete" disabled>Delete guest workspace</button>
+      <p class="av18-operator-status" id="av18OperatorStatus" role="status" aria-live="polite">Create a workspace to enable bounded tasks.</p>
+    </aside>
+    <section class="av18-workspace" aria-labelledby="av18TimelineTitle">
+      <header class="av18-workspace-head">
+        <div><p class="av18-panel-kicker">02 / TOOL TIMELINE</p><h3 id="av18TimelineTitle">Execution graph</h3></div>
+        <span id="av18LiveState" class="av18-live-state" role="status" aria-live="polite" data-state="idle">NOT EXECUTED</span>
+      </header>
+      <div class="av18-graph" aria-label="Four-step evidence carrying operation graph">
+        <div class="av18-graph-node" data-av18-stage="search" data-state="idle"><span class="av18-node-num">01</span><strong>Retrieve</strong><small>Search D1</small></div>
+        <div class="av18-graph-node" data-av18-stage="run" data-state="idle"><span class="av18-node-num">02</span><strong>Execute</strong><small>Saved run</small></div>
+        <div class="av18-graph-node" data-av18-stage="artifact" data-state="idle"><span class="av18-node-num">03</span><strong>Persist</strong><small>Artifact</small></div>
+        <div class="av18-graph-node" data-av18-stage="verify" data-state="idle"><span class="av18-node-num">04</span><strong>Validate</strong><small>SHA-256</small></div>
+      </div>
+      <div class="av18-progress" aria-label="Observed completed operation count"><span id="av18ProgressFill" style="width:0"></span></div>
+      <div class="av18-graph-caption"><span>Real API response gates only</span><strong id="av18ProgressLabel">0 / 4 OBSERVED</strong></div>
+      <div class="av18-telemetry">
+        <div class="av18-telemetry-heading"><h4>Observed tool events</h4><span id="av18EventCount">00</span></div>
+        <ol id="av18EventList" class="av18-events" aria-label="Actual observed API operations">
+          <li class="av18-empty">No server operation is recorded in this tab. Connect and prepare to begin.</li>
+        </ol>
+        <div class="av18-note">The top-level agent plan is browser orchestration. A workflow run and evidence document are individually server-persisted; this timeline is <strong>not</strong> an atomic server job receipt.</div>
+      </div>
+    </section>
+    <aside class="av18-evidence" aria-labelledby="av18EvidenceTitle">
+      <div class="av18-evidence-head"><p class="av18-panel-kicker">03 / READBACK PROOF</p><h3 id="av18EvidenceTitle">Evidence ledger</h3></div>
+      <div class="av18-evidence-badge" id="av18Verdict" data-state="pending"><span class="av18-verdict-dot"></span><strong id="av18VerdictText">Awaiting observed proof</strong></div>
+      <dl class="av18-metrics">
+        <div><dt>Workflow execution</dt><dd id="av18RunId">—</dd></div>
+        <div><dt>Saved document</dt><dd id="av18ArtifactId">—</dd></div>
+        <div><dt>SHA-256 comparison</dt><dd id="av18Hash">—</dd></div>
+        <div><dt>Source passage</dt><dd id="av18Source">—</dd></div>
+      </dl>
+      <button type="button" id="av18Export" disabled class="av18-export">Download verified receipt <span aria-hidden="true">↓</span></button>
+      <p id="av18ExportStatus" class="av18-export-status" role="status" aria-live="polite">A downloadable record is enabled only after real server readback.</p>
+      <a href="/apps/workbench/" class="av18-ref">Inspect the underlying API workbench <span aria-hidden="true">↗</span></a>
+    </aside>
+  </div>
+</section>
