@@ -60,6 +60,7 @@ const launch=process.env.PLAYWRIGHT_EXECUTABLE||undefined;
    const context=await browser.newContext({viewport:{width:320,height:690},reducedMotion:'reduce'});
    const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
    await page.goto(origin+'/apps/interface/',{waitUntil:'networkidle'});
+   if(await page.locator('#v17NativeExtras').count())await page.locator('#v17NativeExtras>summary').click();
    verify(Number(await page.locator('#vInterfaceEvents').innerText())>=1,'Interface ready event recorded');
    await page.locator('#toggle').click();
    verify(await page.locator('#toggle').getAttribute('aria-pressed')==='true','Interface toggle action real');
