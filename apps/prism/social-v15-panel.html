@@ -1,0 +1,26 @@
+<section class="social-v15-board" aria-labelledby="socialV15Title">
+ <div class="social-v15-kicker">RELATIONSHIP INSPECTOR <span>01 / 02</span></div>
+ <h3 id="socialV15Title">Connections in motion</h3>
+ <p class="social-v15-hint">Two fictional identities. The relationship edges below are computed from your actual actions in this tab.</p>
+ <div class="social-v15-graph" aria-label="Live simulated social relationship graph">
+   <div class="social-v15-person"><span class="social-v15-monogram">A</span><span>Avery</span></div>
+   <div class="social-v15-edges"><span id="edgeAtoB" class="social-v15-edge">A → B · not following</span><span id="edgeBtoA" class="social-v15-edge">B → A · not following</span></div>
+   <div class="social-v15-person"><span class="social-v15-monogram">M</span><span>Morgan</span></div>
+ </div>
+ <div class="social-v15-metrics" aria-label="Live interaction counters">
+   <div><strong id="v15Edges">0</strong><span>follow edges</span></div>
+   <div><strong id="v15Replies">0</strong><span>replies</span></div>
+   <div><strong id="v15Saves">0</strong><span>saved posts</span></div>
+ </div>
+</section>
+<section class="social-v15-board social-v15-activity" aria-labelledby="socialV15Activity">
+ <div class="social-v15-kicker">ACTION EVIDENCE <span>SESSION ONLY</span></div>
+ <h3 id="socialV15Activity">Activity & proof</h3>
+ <p class="social-v15-hint">A bounded record of actions that actually saved. Reload this tab to inspect continuity. Export contains only summary counts and event labels, not the text of posts.</p>
+ <ol id="v15EventList" class="social-v15-events" aria-live="polite"></ol>
+ <div class="social-v15-actions">
+   <button type="button" id="v15Download" class="social-v15-action">↓ Download proof JSON</button>
+   <button type="button" id="v15ClearLog" class="social-v15-action">Clear action log</button>
+ </div>
+ <p id="v15ProofStatus" role="status" class="social-v15-hint social-v15-result"></p>
+</section>

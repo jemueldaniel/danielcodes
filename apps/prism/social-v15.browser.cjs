@@ -1,0 +1,93 @@
+'use strict';
+const assert=require('node:assert/strict'),http=require('node:http'),fs=require('node:fs/promises'),path=require('node:path');
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright-core');
+const executablePath=process.env.PLAYWRIGHT_EXECUTABLE||'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
+(async()=>{
+ const [prism,micro]=await Promise.all([import('./worker.mjs'),import('./microapps-worker.mjs')]);
+ const server=http.createServer(async(req,res)=>{try{
+  const uri=req.url.split('?')[0];
+  if(uri==='/assets/portrait.jpg'){res.writeHead(200,{'content-type':'image/jpeg'});res.end(await fs.readFile(path.join(__dirname,'../../assets/portrait.jpg')));return}
+  const worker=uri.startsWith('/ui-20261011/')||uri==='/'||uri==='/apps/'?prism.default:micro.default;
+  const response=await worker.fetch(new Request('http://127.0.0.1'+uri,{method:req.method}));
+  res.writeHead(response.status,Object.fromEntries(response.headers));res.end(Buffer.from(await response.arrayBuffer()));
+ }catch(err){res.writeHead(500);res.end(err.stack)}});
+ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+ const target=process.env.WORKFORM_LIVE_ORIGIN;
+ if(target&&target!=='https://jemueldaniel.website')throw Error('Only the approved public origin may be tested');
+ const origin=target||('http://127.0.0.1:'+server.address().port), browser=await chromium.launch({headless:true,executablePath,args:['--no-first-run','--disable-extensions']});
+ let passed=0;const failures=[];function check(test,label){assert.ok(test,label);console.log('PASS',label);passed++}
+ try{
+ for(const width of [320,390,768,1440]){
+  const ctx=await browser.newContext({viewport:{width,height:850},acceptDownloads:true,reducedMotion:'reduce'});
+  const page=await ctx.newPage();page.on('pageerror',e=>failures.push(e.message));
+  const result=await page.goto(origin+'/apps/social/',{waitUntil:'networkidle'});
+  check(result.status()===200,'Social 200 @'+width);
+  check(await page.locator('#socialV15Title').isVisible(),'Graph displayed @'+width);
+  check(await page.locator('#v15Download').isVisible(),'Proof controls displayed @'+width);
+  check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'No page overflow @'+width);
+  check(await page.locator('#v15Edges').innerText()==='0','Zero initial directed edges @'+width);
+  const actualTheme=await page.evaluate(()=>({token:getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(),body:getComputedStyle(document.body).backgroundColor}));
+  check(actualTheme.token==='#0a0e15','Original navy monochrome theme @'+width+' '+JSON.stringify(actualTheme));
+  await page.locator('#followToggle').click();
+  check(await page.locator('#v15Edges').innerText()==='1','Avery follows Morgan @'+width);
+  check(await page.locator('#edgeAtoB').getAttribute('data-connected')==='true','Graph reflects committed A→B edge @'+width);
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  check(await page.locator('#edgeAtoB').evaluate(el=>getComputedStyle(el).animationName.includes('social-v15-connection')),'Connected graph has native flowing motion @'+width);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  check(await page.locator('#edgeAtoB').evaluate(el=>getComputedStyle(el).animationName==='none'),'Reduced motion stops graph flow @'+width);
+  await page.locator('#persona').selectOption('B');
+  check(await page.locator('#v15Edges').innerText()==='1','Directed edge preserved across identity switch @'+width);
+  await page.locator('#followToggle').click();
+  check(await page.locator('#v15Edges').innerText()==='2','Morgan follows Avery @'+width);
+  await page.locator('#postText').fill('A fictional launch note from Morgan — this text must not appear in proof exports.');
+  await page.locator('#postForm button[type=submit]').click();
+  check(await page.locator('#statPosts').innerText()==='3','Submitted post stored @'+width);
+  await page.locator('#persona').selectOption('A');
+  const custom=page.locator('.post').filter({hasText:'A fictional launch note from Morgan'});
+  check(await custom.count()===1,'Custom post in timeline @'+width);
+  await custom.locator('.post-buttons button').first().click();
+  check(await page.locator('#statLikes').innerText()==='1','Like persisted @'+width);
+  await custom.locator('.post-buttons button').nth(1).click();
+  check(await page.locator('#v15Saves').innerText()==='1','Saved graph count updated @'+width);
+  await custom.locator('input').fill('Safe fictional comment.');
+  await custom.locator('.reply button').click();
+  check(await page.locator('#v15Replies').innerText()==='1','Reply count computed from stored state @'+width);
+  check((await page.locator('#v15EventList li').count())>=4,'Recorded committed actions @'+width);
+  await page.reload({waitUntil:'networkidle'});
+  check(await page.locator('#v15Edges').innerText()==='2','Edges persist across reload in tab @'+width);
+  check(await page.locator('#v15Replies').innerText()==='1','Replies persist across reload in tab @'+width);
+  check((await page.locator('#v15EventList li').count())>=4,'Audit log persists across reload @'+width);
+  const promise=page.waitForEvent('download');
+  await page.locator('#v15Download').click();
+  const dl=await promise;
+  const bytes=await fs.readFile(await dl.path(),'utf8');
+  const exported=JSON.parse(bytes);
+  check(dl.suggestedFilename()==='daniel-social-tab-proof.json','Named JSON proof exported @'+width);
+  check(exported.summary.posts===3&&exported.summary.followEdges===2&&exported.summary.replies===1,'Export contains real state counters @'+width);
+  check(exported.privatePostBodiesExcluded===true&&!bytes.includes('fictional launch note'),'Export excludes authored private post text @'+width);
+  await page.locator('#resetSocial').click();
+  check(await page.locator('#statPosts').innerText()==='3','First click safely arms reset only @'+width);
+  check((await page.locator('#resetSocial').innerText()).includes('Confirm reset'),'Inline confirmation, no modal @'+width);
+  await page.locator('#postText').click();
+  check(await page.locator('#resetSocial').innerText()==='Reset synthetic workspace','Other action cancels armed reset @'+width);
+  await page.locator('#resetSocial').click();
+  await page.keyboard.press('Escape');
+  check(await page.locator('#resetSocial').innerText()==='Reset synthetic workspace','Escape cancels armed reset @'+width);
+  check(await page.locator('#statPosts').innerText()==='3','Cancelled resets preserve posts @'+width);
+  await page.locator('#resetSocial').click();
+  await page.locator('#resetSocial').click();
+  check(await page.locator('#statPosts').innerText()==='2','Second click performs synthetic reset @'+width);
+  check(await page.locator('#v15Edges').innerText()==='0','Graph cleared on reset @'+width);
+  check(await page.locator('#v15EventList li').count()===1,'Action history cleared on reset @'+width);
+  check(await page.locator('#jd-popup-v9 .jd-launcher').isVisible(),'Lower-left Ask Daniel visible @'+width);
+  await page.locator('#jd-popup-v9 .jd-launcher').click();
+  check(await page.locator('#jd-popup-v9 .jd-panel').isVisible(),'Nonmodal Ask opens @'+width);
+  await page.keyboard.press('Escape');
+  check(!(await page.locator('#jd-popup-v9 .jd-panel').isVisible()),'Escape closes assistant @'+width);
+  check(await page.locator('#postText').isVisible(),'Assistant does not block Social @'+width);
+  await ctx.close();
+ }
+ check(failures.length===0,'No uncaught JS errors: '+JSON.stringify(failures));
+ console.log('SOCIAL_V15_EDGE_PASS',passed);
+ }finally{await browser.close();await new Promise((res,rej)=>server.close(e=>e?rej(e):res()))}
+})().catch(e=>{console.error(e.stack);process.exitCode=1});
