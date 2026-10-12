@@ -15,3 +15,10 @@ Source-of-truth files: `motion-v16.css` and `build-motion-v16.cjs`, which reprod
 - Site-wide local 10-route browser overlay/Ask regression: **329/329 PASS** at the same four widths; no blocking overlay/scroll-lock, original color and proper nonmodal Ask.
 
 These local results alone are **not** a claim of a public Cloudflare deployment. Verify the existing live Prism source/version/settings, publish only exact reviewed GitHub bytes, require 100% deployment and rerun public HTTPS browser tests. Existing Studio/Pay presentation restrictions remain untouched; ten cards are not ten production backend attestations.
+
+## Verified public Cloudflare release — October 12, 2026
+
+- Existing Prism Cloudflare Worker `jemuel-workform-prism-v2` was independently preflight-qualified at old Git blob `201201ed6d163dbf661d60836ceb68d0279d1967`, 222,732 bytes, old version `d70ad566-a75a-4639-b621-998950088991` at 100%, empty bindings, compatibility date `2026-10-11`.
+- The exact published V16 reviewed GitHub Worker blob `283ef566483cd0c99585c897ba7b7c119d633de1` was uploaded to the **same** Prism Worker (no route/account changes), independently verified by Cloudflare script readback at 225,296 UTF-8 bytes. New deployment `bb8c5c92-3037-45cf-b522-d85701268d4c`, version `6be3f9ec-81b5-448d-b7b2-f43069432b6d`, **100% traffic**, old empty bindings and compatibility date preserved.
+- Installed Edge **production HTTPS** acceptance using only `https://jemueldaniel.website`: V16 motion **113/113 PASS** and ten-route no-blocking-overlay/Ask Daniel **329/329 PASS**, four widths 320, 390, 768, 1440. All target responses 200, floating nonmodal assistant opens/closes via Escape without locking page scroll, portrait/JavaScript errors absent, native app gallery effects and reduced-motion CSS verified.
+- Cloudflare real deployment, GitHub review and public HTTPS tests do **not** certify every app's backend, native mobile screen-reader quality or interviews. The separate safety-held Studio/Pay presentation routes remain untouched.
